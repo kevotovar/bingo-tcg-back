@@ -20,8 +20,7 @@ type NewLink struct {
 }
 
 type NewUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Email string `json:"email"`
 }
 
 type RefreshTokenInput struct {
@@ -29,6 +28,6 @@ type RefreshTokenInput struct {
 }
 
 type User struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
+	ID    string `json:"id"`
+	Email string `json:"email"`
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/kevotovar/bingo-tcg-back/graph/generated"
 	"github.com/kevotovar/bingo-tcg-back/graph/model"
+	"github.com/kevotovar/bingo-tcg-back/models"
 )
 
 func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) (*model.Link, error) {
@@ -16,13 +17,21 @@ func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) 
 	var user model.User
 	link.Address = input.Address
 	link.Title = input.Title
-	user.Username = "Kevo"
 	link.User = &user
 	return &link, nil
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
+	var user model.User
+	modelsUser := models.User{
+		Email: input.Email,
+	}
+	_, err := modelsUser.Save()
+	user = model.User{
+		ID:    modelsUser.ID.String(),
+		Email: modelsUser.Email,
+	}
+	return &user, err
 }
 
 func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string, error) {
@@ -38,7 +47,7 @@ func (r *queryResolver) Links(ctx context.Context) ([]*model.Link, error) {
 	dummyLink := model.Link{
 		Title:   "our dummy link",
 		Address: "Here",
-		User:    &model.User{Username: "admin"},
+		User:    &model.User{},
 	}
 	links = append(links, &dummyLink)
 	return links, nil

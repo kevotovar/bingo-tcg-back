@@ -11,6 +11,7 @@ import (
 
 	"github.com/kevotovar/bingo-tcg-back/graph"
 	"github.com/kevotovar/bingo-tcg-back/graph/generated"
+	models "github.com/kevotovar/bingo-tcg-back/models"
 )
 
 const defaultPort = "8080"
@@ -20,6 +21,7 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
+	models.InitDB(os.Getenv("MONGO_DB_URL"), os.Getenv("MONGO_DB_DATABASE"))
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
